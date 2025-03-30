@@ -24,7 +24,7 @@ export function DepartureBoard({ number}) {
         try{
             var departuresList = [];
             //console.log(data);
-            
+            if (Math.min(data.departures.length,5) < 1){return <p>Z tego przystanku obecnie nie są wykonywane żadne kursy.</p>} 
             for(let i=0;i < Math.min(data.departures.length,5);i++){
                 switch(data.departures[i].time_real){
                     case null:
@@ -56,6 +56,7 @@ export function DepartureBoard({ number}) {
                         break;
                 }
             }
+             
             return departuresList;
         }catch(error){
             return (String(error));
