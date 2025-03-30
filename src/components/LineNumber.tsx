@@ -1,7 +1,39 @@
 //import "./../index.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function LineNumber({variant,number}){
+export function LineNumber({number}){
+    const [variant,setVariant] = useState();
+    async function fetchVariant() {
+        //bierze departures z API
+        const requestDepartures = new Request("https://www.zditm.szczecin.pl/api/v1/lines", {
+            method: "GET",
+        });
+
+        const response = await fetch(requestDepartures).then((response) => response.text())
+            .then((data) => {
+                console.log(data);
+                JSON.parse(data).data.forEach((element)=>{
+                    if (element.number == number) {
+                      if(element.type == "night"){
+                            setVariant("night");
+                      }else if(element.vehicle_type == "bus" && element.highlighted == true){
+                        setVariant("busDiverted");
+                      }else if(element.vehicle_type == "tram" && element.highlighted == true){
+                        setVariant("tramDiverted");
+                      }else if(element.subtype == "fast"){
+                        setVariant("expressBus");
+                      }else{
+                        setVariant(element.vehicle_type);
+                      }
+                      console.log(element.vehicle_type);
+                    } 
+                  });
+            });
+
+    }
+    useEffect(() => {
+        fetchVariant();    
+    }, [])
     function styleLineNumber(){
         switch(variant){
             case "tram":

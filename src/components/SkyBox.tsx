@@ -7,7 +7,7 @@ export function SkyBox({children}){
     function styleSkybox(){
         const hour = (new Date()).getHours();
         
-        console.log("Godzina: "+ hour);
+        //console.log("Godzina: "+ hour);
         
         if(hour > 20 || hour < 4){
             //noc

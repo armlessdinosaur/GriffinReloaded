@@ -7,10 +7,15 @@
 
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { CookiesProvider } from 'react-cookie';
 
 function start() {
   const root = createRoot(document.getElementById("root")!);
-  root.render(<App />);
+  root.render(
+  <CookiesProvider defaultSetOptions={{ path: '/' }}>
+    <App />
+  </CookiesProvider>
+  );
 }
 
 if (document.readyState === "loading") {
