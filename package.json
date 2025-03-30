@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bun-plugin-tailwind": "^0.0.14",
+    "express": "^4.21.2",
     "lucide-react": "^0.485.0",
     "react": "^19",
     "react-cookie": "^8.0.1",

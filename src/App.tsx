@@ -116,7 +116,7 @@ export function App() {
             Griffin
             </div>
             <div className="open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end">
-              4.1 "Stare miasto"
+              4.2 "Stare miasto"
             </div>
           </div>
 
