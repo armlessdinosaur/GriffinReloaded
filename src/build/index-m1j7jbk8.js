@@ -18161,12 +18161,20 @@ var createLucideIcon = (iconName, iconNode) => {
   return Component;
 };
 
-// node_modules/lucide-react/dist/esm/icons/x.js
+// node_modules/lucide-react/dist/esm/icons/external-link.js
 var __iconNode = [
+  ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+  ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+  ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
+];
+var ExternalLink = createLucideIcon("external-link", __iconNode);
+
+// node_modules/lucide-react/dist/esm/icons/x.js
+var __iconNode2 = [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-var X = createLucideIcon("x", __iconNode);
+var X = createLucideIcon("x", __iconNode2);
 // src/App.tsx
 var import_react8 = __toESM(require_react(), 1);
 var import_react_modal = __toESM(require_lib(), 1);
@@ -18791,6 +18799,85 @@ function shouldUpdate(dependencies, newCookies, oldCookies) {
   return false;
 }
 
+// node_modules/date-fns/constants.js
+var daysInYear = 365.2425;
+var maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1000;
+var minTime = -maxTime;
+var secondsInHour = 3600;
+var secondsInDay = secondsInHour * 24;
+var secondsInWeek = secondsInDay * 7;
+var secondsInYear = secondsInDay * daysInYear;
+var secondsInMonth = secondsInYear / 12;
+var secondsInQuarter = secondsInMonth * 3;
+var constructFromSymbol = Symbol.for("constructDateFrom");
+
+// node_modules/date-fns/constructFrom.js
+function constructFrom(date, value) {
+  if (typeof date === "function")
+    return date(value);
+  if (date && typeof date === "object" && constructFromSymbol in date)
+    return date[constructFromSymbol](value);
+  if (date instanceof Date)
+    return new date.constructor(value);
+  return new Date(value);
+}
+
+// node_modules/date-fns/toDate.js
+function toDate(argument, context) {
+  return constructFrom(context || argument, argument);
+}
+
+// node_modules/date-fns/addDays.js
+function addDays(date, amount, options) {
+  const _date = toDate(date, options?.in);
+  if (isNaN(amount))
+    return constructFrom(options?.in || date, NaN);
+  if (!amount)
+    return _date;
+  _date.setDate(_date.getDate() + amount);
+  return _date;
+}
+
+// node_modules/date-fns/addMonths.js
+function addMonths(date, amount, options) {
+  const _date = toDate(date, options?.in);
+  if (isNaN(amount))
+    return constructFrom(options?.in || date, NaN);
+  if (!amount) {
+    return _date;
+  }
+  const dayOfMonth = _date.getDate();
+  const endOfDesiredMonth = constructFrom(options?.in || date, _date.getTime());
+  endOfDesiredMonth.setMonth(_date.getMonth() + amount + 1, 0);
+  const daysInMonth = endOfDesiredMonth.getDate();
+  if (dayOfMonth >= daysInMonth) {
+    return endOfDesiredMonth;
+  } else {
+    _date.setFullYear(endOfDesiredMonth.getFullYear(), endOfDesiredMonth.getMonth(), dayOfMonth);
+    return _date;
+  }
+}
+
+// node_modules/date-fns/add.js
+function add(date, duration, options) {
+  const {
+    years = 0,
+    months = 0,
+    weeks = 0,
+    days = 0,
+    hours = 0,
+    minutes = 0,
+    seconds = 0
+  } = duration;
+  const _date = toDate(date, options?.in);
+  const dateWithMonths = months || years ? addMonths(_date, months + years * 12) : _date;
+  const dateWithDays = days || weeks ? addDays(dateWithMonths, days + weeks * 7) : dateWithMonths;
+  const minutesToAdd = minutes + hours * 60;
+  const secondsToAdd = seconds + minutesToAdd * 60;
+  const msToAdd = secondsToAdd * 1000;
+  return constructFrom(options?.in || date, +dateWithDays + msToAdd);
+}
+
 // src/components/Card.tsx
 var jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
 function Card({ children }) {
@@ -19158,7 +19245,10 @@ function App() {
       }
       list.push(Number(stopNumberChosenForAdding));
       setStopList(list);
-      setCookie("stopList", stopList);
+      setCookie("stopList", stopList, {
+        path: "/",
+        expires: add(new Date(Date.now()), { years: 1 })
+      });
       setSettingsIsOpen(false);
     }
   }
@@ -19170,7 +19260,7 @@ function App() {
       }
       var listNoRemovedStop = list.splice(list.indexOf(stopNumberChosenForAdding), 1);
       setStopList(listNoRemovedStop);
-      setCookie("stopList", stopList);
+      setCookie("stopList", listNoRemovedStop);
       setSettingsIsOpen(false);
     }
   }
@@ -19223,8 +19313,29 @@ function App() {
                       id: "stopNumber",
                       type: "text",
                       value: stopNumberChosenForAdding,
+                      placeholder: "Numer przystanku",
                       onChange: (e) => setStopNumberChosenForAdding(e.target.value)
-                    }, undefined, false, undefined, this)
+                    }, undefined, false, undefined, this),
+                    /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("p", {
+                      children: [
+                        "Numer przystanku znajdziesz na",
+                        /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("a", {
+                          className: "hover:underline",
+                          href: "https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow",
+                          children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+                            className: "flex flex-row",
+                            children: [
+                              /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("p", {
+                                children: "stronie ZDiTM"
+                              }, undefined, false, undefined, this),
+                              /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(ExternalLink, {
+                                size: 18
+                              }, undefined, false, undefined, this)
+                            ]
+                          }, undefined, true, undefined, this)
+                        }, undefined, false, undefined, this)
+                      ]
+                    }, undefined, true, undefined, this)
                   ]
                 }, undefined, true, undefined, this),
                 /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Button, {
@@ -19253,7 +19364,7 @@ function App() {
                 }, undefined, false, undefined, this),
                 /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
                   className: "open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end",
-                  children: '4.1 "Stare miasto"'
+                  children: '4.3 "Stare miasto"'
                 }, undefined, false, undefined, this)
               ]
             }, undefined, true, undefined, this),

@@ -1,9 +1,10 @@
 import "./index.css";
-import { Bus, X } from 'lucide-react';
+import { Bus, X, ExternalLink } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import { useCookies } from 'react-cookie';
+import { add } from "date-fns";
 
 import { StopName } from "./components/StopName";
 import { Card } from "./components/Card";
@@ -38,7 +39,10 @@ export function App() {
       //alert(list);
 
       setStopList(list);
-      setCookie("stopList",stopList)
+      setCookie("stopList",stopList,{
+        path: "/",
+        expires: add(new Date(Date.now()),{years: 1}) //caisteczko wygasa po roku od stwrozenia
+      })
       setSettingsIsOpen(false);
       //alert(stopList);
 
@@ -55,12 +59,12 @@ export function App() {
       //if(list.includes(stopNumberChosenForAdding)){
         var listNoRemovedStop = list.splice(list.indexOf(stopNumberChosenForAdding), 1) 
       //}
-      //alert(list.includes(stopNumberChosenForAdding));
-      //alert(list.indexOf(stopNumberChosenForAdding));
+
+      
 
       setStopList(listNoRemovedStop);
       //alert(listNoRemovedStop);
-      setCookie("stopList",stopList)
+      setCookie("stopList",listNoRemovedStop)
       setSettingsIsOpen(false);
       //alert(stopList);
 
@@ -79,8 +83,8 @@ export function App() {
     setStopDisplayList(displayStops);
   }
   useEffect(() => {
-          const interval = setInterval(() => {
-              displayStops(); 
+        const interval = setInterval(() => {
+        displayStops(); 
         }, 1000);
       }, [])
   return (
@@ -101,8 +105,15 @@ export function App() {
                 <label className="block font-bold mb-2" for="stopNumber">
                   Dodaj przystanek
                 </label>
-                <input className="border rounded w-full py-2 px-3  leading-tight focus:outline-none shadow-outline shadow-md bg-neutral-100" id="stopNumber" type="text" value={stopNumberChosenForAdding} onChange={(e) => setStopNumberChosenForAdding(e.target.value)}>
+                <input className="border rounded w-full py-2 px-3  leading-tight focus:outline-none shadow-outline shadow-md bg-neutral-100" id="stopNumber" type="text" value={stopNumberChosenForAdding} placeholder="Numer przystanku" onChange={(e) => setStopNumberChosenForAdding(e.target.value)}>
                 </input>
+                <p>Numer przystanku znajdziesz na 
+                  <a className="hover:underline" href="https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow">
+                    <div className="flex flex-row">
+                    <p>stronie ZDiTM</p><ExternalLink size={18}/>
+                    </div>
+                  </a>
+                </p>
               </div>
               <Button onClick={addStop}>Dodaj przystanek</Button>
               <Button onClick={removeStop}>Usuń przystanek</Button>
@@ -116,7 +127,7 @@ export function App() {
             Griffin
             </div>
             <div className="open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end">
-              4.2 "Stare miasto"
+              4.3 "Stare miasto"
             </div>
           </div>
 
