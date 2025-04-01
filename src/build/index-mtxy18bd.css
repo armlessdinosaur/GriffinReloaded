@@ -1,5 +1,6 @@
 @import "https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap";
 
 /* node_modules/tailwindcss/index.css */
 @layer theme, base, components, utilities;
@@ -233,6 +234,27 @@
   font-optical-sizing: auto;
   font-variation-settings: "wdth" 100;
   font-family: Open Sans, sans-serif;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.inter-600 {
+  font-optical-sizing: auto;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.inter-700 {
+  font-optical-sizing: auto;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.inter-800 {
+  font-optical-sizing: auto;
+  font-family: Inter, sans-serif;
   font-style: normal;
   font-weight: 800;
 }

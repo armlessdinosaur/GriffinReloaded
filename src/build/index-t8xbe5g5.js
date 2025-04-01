@@ -15934,28 +15934,28 @@ var require_checkPropTypes = __commonJS((exports, module) => {
   var ReactPropTypesSecret;
   var loggedTypeFailures;
   var has;
-  function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+  function checkPropTypes(typeSpecs, values, location2, componentName, getStack) {
     if (true) {
       for (var typeSpecName in typeSpecs) {
         if (has(typeSpecs, typeSpecName)) {
           var error;
           try {
             if (typeof typeSpecs[typeSpecName] !== "function") {
-              var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`." + "This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+              var err = Error((componentName || "React class") + ": " + location2 + " type `" + typeSpecName + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`." + "This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
               err.name = "Invariant Violation";
               throw err;
             }
-            error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+            error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location2, null, ReactPropTypesSecret);
           } catch (ex) {
             error = ex;
           }
           if (error && !(error instanceof Error)) {
-            printWarning((componentName || "React class") + ": type specification of " + location + " `" + typeSpecName + "` is invalid; the type checker " + "function must return `null` or an `Error` but returned a " + typeof error + ". " + "You may have forgotten to pass an argument to the type checker " + "creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " + "shape all require an argument).");
+            printWarning((componentName || "React class") + ": type specification of " + location2 + " `" + typeSpecName + "` is invalid; the type checker " + "function must return `null` or an `Error` but returned a " + typeof error + ". " + "You may have forgotten to pass an argument to the type checker " + "creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and " + "shape all require an argument).");
           }
           if (error instanceof Error && !(error.message in loggedTypeFailures)) {
             loggedTypeFailures[error.message] = true;
             var stack = getStack ? getStack() : "";
-            printWarning("Failed " + location + " type: " + error.message + (stack != null ? stack : ""));
+            printWarning("Failed " + location2 + " type: " + error.message + (stack != null ? stack : ""));
           }
         }
       }
@@ -16042,7 +16042,7 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
         var manualPropTypeCallCache = {};
         var manualPropTypeWarningCount = 0;
       }
-      function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      function checkType(isRequired, props, propName, componentName, location2, propFullName, secret) {
         componentName = componentName || ANONYMOUS;
         propFullName = propFullName || propName;
         if (secret !== ReactPropTypesSecret) {
@@ -16062,13 +16062,13 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
         if (props[propName] == null) {
           if (isRequired) {
             if (props[propName] === null) {
-              return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required " + ("in `" + componentName + "`, but its value is `null`."));
+              return new PropTypeError("The " + location2 + " `" + propFullName + "` is marked as required " + ("in `" + componentName + "`, but its value is `null`."));
             }
-            return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required in " + ("`" + componentName + "`, but its value is `undefined`."));
+            return new PropTypeError("The " + location2 + " `" + propFullName + "` is marked as required in " + ("`" + componentName + "`, but its value is `undefined`."));
           }
           return null;
         } else {
-          return validate(props, propName, componentName, location, propFullName);
+          return validate(props, propName, componentName, location2, propFullName);
         }
       }
       var chainedCheckType = checkType.bind(null, false);
@@ -16076,12 +16076,12 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
       return chainedCheckType;
     }
     function createPrimitiveTypeChecker(expectedType) {
-      function validate(props, propName, componentName, location, propFullName, secret) {
+      function validate(props, propName, componentName, location2, propFullName, secret) {
         var propValue = props[propName];
         var propType = getPropType(propValue);
         if (propType !== expectedType) {
           var preciseType = getPreciseType(propValue);
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + preciseType + "` supplied to `" + componentName + "`, expected ") + ("`" + expectedType + "`."), { expectedType });
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + preciseType + "` supplied to `" + componentName + "`, expected ") + ("`" + expectedType + "`."), { expectedType });
         }
         return null;
       }
@@ -16091,17 +16091,17 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
       return createChainableTypeChecker(emptyFunctionThatReturnsNull);
     }
     function createArrayOfTypeChecker(typeChecker) {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         if (typeof typeChecker !== "function") {
           return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside arrayOf.");
         }
         var propValue = props[propName];
         if (!Array.isArray(propValue)) {
           var propType = getPropType(propValue);
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an array."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an array."));
         }
         for (var i = 0;i < propValue.length; i++) {
-          var error = typeChecker(propValue, i, componentName, location, propFullName + "[" + i + "]", ReactPropTypesSecret);
+          var error = typeChecker(propValue, i, componentName, location2, propFullName + "[" + i + "]", ReactPropTypesSecret);
           if (error instanceof Error) {
             return error;
           }
@@ -16111,33 +16111,33 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
       return createChainableTypeChecker(validate);
     }
     function createElementTypeChecker() {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var propValue = props[propName];
         if (!isValidElement(propValue)) {
           var propType = getPropType(propValue);
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement."));
         }
         return null;
       }
       return createChainableTypeChecker(validate);
     }
     function createElementTypeTypeChecker() {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var propValue = props[propName];
         if (!ReactIs.isValidElementType(propValue)) {
           var propType = getPropType(propValue);
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement type."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement type."));
         }
         return null;
       }
       return createChainableTypeChecker(validate);
     }
     function createInstanceTypeChecker(expectedClass) {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         if (!(props[propName] instanceof expectedClass)) {
           var expectedClassName = expectedClass.name || ANONYMOUS;
           var actualClassName = getClassName(props[propName]);
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + actualClassName + "` supplied to `" + componentName + "`, expected ") + ("instance of `" + expectedClassName + "`."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + actualClassName + "` supplied to `" + componentName + "`, expected ") + ("instance of `" + expectedClassName + "`."));
         }
         return null;
       }
@@ -16154,7 +16154,7 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
         }
         return emptyFunctionThatReturnsNull;
       }
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var propValue = props[propName];
         for (var i = 0;i < expectedValues.length; i++) {
           if (is(propValue, expectedValues[i])) {
@@ -16168,23 +16168,23 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
           }
           return value;
         });
-        return new PropTypeError("Invalid " + location + " `" + propFullName + "` of value `" + String(propValue) + "` " + ("supplied to `" + componentName + "`, expected one of " + valuesString + "."));
+        return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of value `" + String(propValue) + "` " + ("supplied to `" + componentName + "`, expected one of " + valuesString + "."));
       }
       return createChainableTypeChecker(validate);
     }
     function createObjectOfTypeChecker(typeChecker) {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         if (typeof typeChecker !== "function") {
           return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside objectOf.");
         }
         var propValue = props[propName];
         var propType = getPropType(propValue);
         if (propType !== "object") {
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an object."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an object."));
         }
         for (var key in propValue) {
           if (has(propValue, key)) {
-            var error = typeChecker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+            var error = typeChecker(propValue, key, componentName, location2, propFullName + "." + key, ReactPropTypesSecret);
             if (error instanceof Error) {
               return error;
             }
@@ -16206,11 +16206,11 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
           return emptyFunctionThatReturnsNull;
         }
       }
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var expectedTypes = [];
         for (var i2 = 0;i2 < arrayOfTypeCheckers.length; i2++) {
           var checker2 = arrayOfTypeCheckers[i2];
-          var checkerResult = checker2(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
+          var checkerResult = checker2(props, propName, componentName, location2, propFullName, ReactPropTypesSecret);
           if (checkerResult == null) {
             return null;
           }
@@ -16219,35 +16219,35 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
           }
         }
         var expectedTypesMessage = expectedTypes.length > 0 ? ", expected one of type [" + expectedTypes.join(", ") + "]" : "";
-        return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`" + expectedTypesMessage + "."));
+        return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` supplied to " + ("`" + componentName + "`" + expectedTypesMessage + "."));
       }
       return createChainableTypeChecker(validate);
     }
     function createNodeChecker() {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         if (!isNode(props[propName])) {
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
         }
         return null;
       }
       return createChainableTypeChecker(validate);
     }
-    function invalidValidatorError(componentName, location, propFullName, key, type) {
-      return new PropTypeError((componentName || "React class") + ": " + location + " type `" + propFullName + "." + key + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + type + "`.");
+    function invalidValidatorError(componentName, location2, propFullName, key, type) {
+      return new PropTypeError((componentName || "React class") + ": " + location2 + " type `" + propFullName + "." + key + "` is invalid; " + "it must be a function, usually from the `prop-types` package, but received `" + type + "`.");
     }
     function createShapeTypeChecker(shapeTypes) {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var propValue = props[propName];
         var propType = getPropType(propValue);
         if (propType !== "object") {
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
         }
         for (var key in shapeTypes) {
           var checker = shapeTypes[key];
           if (typeof checker !== "function") {
-            return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+            return invalidValidatorError(componentName, location2, propFullName, key, getPreciseType(checker));
           }
-          var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+          var error = checker(propValue, key, componentName, location2, propFullName + "." + key, ReactPropTypesSecret);
           if (error) {
             return error;
           }
@@ -16257,24 +16257,24 @@ var require_factoryWithTypeCheckers = __commonJS((exports, module) => {
       return createChainableTypeChecker(validate);
     }
     function createStrictShapeTypeChecker(shapeTypes) {
-      function validate(props, propName, componentName, location, propFullName) {
+      function validate(props, propName, componentName, location2, propFullName) {
         var propValue = props[propName];
         var propType = getPropType(propValue);
         if (propType !== "object") {
-          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+          return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
         }
         var allKeys = assign({}, props[propName], shapeTypes);
         for (var key in allKeys) {
           var checker = shapeTypes[key];
           if (has(shapeTypes, key) && typeof checker !== "function") {
-            return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+            return invalidValidatorError(componentName, location2, propFullName, key, getPreciseType(checker));
           }
           if (!checker) {
-            return new PropTypeError("Invalid " + location + " `" + propFullName + "` key `" + key + "` supplied to `" + componentName + "`." + `
+            return new PropTypeError("Invalid " + location2 + " `" + propFullName + "` key `" + key + "` supplied to `" + componentName + "`." + `
 Bad object: ` + JSON.stringify(props[propName], null, "  ") + `
 Valid keys: ` + JSON.stringify(Object.keys(shapeTypes), null, "  "));
           }
-          var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+          var error = checker(propValue, key, componentName, location2, propFullName + "." + key, ReactPropTypesSecret);
           if (error) {
             return error;
           }
@@ -18169,14 +18169,22 @@ var __iconNode = [
 ];
 var ExternalLink = createLucideIcon("external-link", __iconNode);
 
-// node_modules/lucide-react/dist/esm/icons/x.js
+// node_modules/lucide-react/dist/esm/icons/trash.js
 var __iconNode2 = [
+  ["path", { d: "M3 6h18", key: "d0wm0j" }],
+  ["path", { d: "M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6", key: "4alrt4" }],
+  ["path", { d: "M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2", key: "v07s0e" }]
+];
+var Trash = createLucideIcon("trash", __iconNode2);
+
+// node_modules/lucide-react/dist/esm/icons/x.js
+var __iconNode3 = [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-var X = createLucideIcon("x", __iconNode2);
+var X = createLucideIcon("x", __iconNode3);
 // src/App.tsx
-var import_react8 = __toESM(require_react(), 1);
+var import_react9 = __toESM(require_react(), 1);
 var import_react_modal = __toESM(require_lib(), 1);
 
 // node_modules/universal-cookie/esm/index.mjs
@@ -19223,22 +19231,95 @@ function Stop({ number }) {
   }, undefined, true, undefined, this);
 }
 
-// src/App.tsx
+// src/components/DraggableStop.tsx
+var import_react8 = __toESM(require_react(), 1);
 var jsx_dev_runtime9 = __toESM(require_jsx_dev_runtime(), 1);
+function DraggableStopName({ number }) {
+  const [stopName, setStopName] = import_react8.useState("");
+  const [requestStop, setRequestStop] = import_react8.useState(false);
+  async function fetchStopInfo() {
+    const request = new Request("https://www.zditm.szczecin.pl/api/v1/stops", {
+      method: "GET"
+    });
+    const response = await fetch(request).then((response2) => response2.text()).then((data) => {
+      JSON.parse(data).data.forEach((element) => {
+        if (element.number == number) {
+          setStopName(element.name);
+          setRequestStop(element.request_stop);
+        }
+      });
+    });
+  }
+  import_react8.useEffect(() => {
+    fetchStopInfo();
+  }, []);
+  return /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+    className: "w-full",
+    children: [
+      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+        className: "open-sans-700 w-full text-lg bg-radial from-neutral-50 to-neutral-200 text-blue-900 p-1 text-center shadow-md flex felx-row gap-3 justify-center items-center border-1 border-neutral-500",
+        children: [
+          /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+            className: "",
+            children: stopName
+          }, undefined, false, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+            className: "flex flex-col gap-1",
+            children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+              className: "text-sm font-bold gap-0 text-neutral-900",
+              children: number
+            }, undefined, false, undefined, this)
+          }, undefined, false, undefined, this)
+        ]
+      }, undefined, true, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+        className: "h-1 w-full bg-blue-900"
+      }, undefined, false, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+        className: "h-1 w-53 bg-cyan-600 -translate-y-1"
+      }, undefined, false, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+        className: "h-1 w-18 bg-lime-600 -translate-y-2"
+      }, undefined, false, undefined, this)
+    ]
+  }, undefined, true, undefined, this);
+}
+
+// src/App.tsx
+var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies();
-  const [settingsIsOpen, setSettingsIsOpen] = import_react8.useState(false);
-  const [stopList, setStopList] = import_react8.useState(function() {
+  const [settingsIsOpen, setSettingsIsOpen] = import_react9.useState(false);
+  const [stopList, setStopList] = import_react9.useState(function() {
     if (Array.isArray(cookies.stopList)) {
       return cookies.stopList;
     } else {
       return [];
     }
   }());
-  const [stopNumberChosenForAdding, setStopNumberChosenForAdding] = import_react8.useState();
-  const [stopDisplayList, setStopDisplayList] = import_react8.useState();
-  function addStop() {
-    if (stopNumberChosenForAdding != null) {
+  const [stopNumberChosenForAdding, setStopNumberChosenForAdding] = import_react9.useState();
+  const [stopDisplayList, setStopDisplayList] = import_react9.useState();
+  const [stopDraggableDisplayList, setStopDraggableDisplayList] = import_react9.useState();
+  async function checkIfStopExists(number) {
+    var stop = null;
+    const request = new Request("https://www.zditm.szczecin.pl/api/v1/stops", {
+      method: "GET"
+    });
+    const response = await fetch(request).then((response2) => response2.text()).then((data) => {
+      JSON.parse(data).data.forEach((element) => {
+        if (element.number == number) {
+          stop = element;
+        }
+      });
+    });
+    if (stop != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  async function addStop() {
+    if (stopNumberChosenForAdding != null && await checkIfStopExists(stopNumberChosenForAdding)) {
       let list = new Array;
       if (stopList != null && Array.isArray(stopList)) {
         list = stopList;
@@ -19250,6 +19331,8 @@ function App() {
         expires: add(new Date(Date.now()), { years: 1 })
       });
       setSettingsIsOpen(false);
+    } else if (stopNumberChosenForAdding != null) {
+      alert("Taki przystanek nie istnieje. Numer przystanku znajdziesz na stronie ZDiTM");
     }
   }
   function removeStop() {
@@ -19258,17 +19341,20 @@ function App() {
       if (stopList != null && Array.isArray(stopList)) {
         list = stopList;
       }
-      var listNoRemovedStop = list.splice(list.indexOf(stopNumberChosenForAdding), 1);
+      var listNoRemovedStop = list.filter(function(element) {
+        return element != stopNumberChosenForAdding;
+      });
       setStopList(listNoRemovedStop);
-      setCookie("stopList", listNoRemovedStop);
       setSettingsIsOpen(false);
+      setCookie("stopList", listNoRemovedStop);
+      location.reload();
     }
   }
   function displayStops() {
     var displayStops2 = [];
     try {
       stopList.forEach((item) => {
-        displayStops2.push(/* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Stop, {
+        displayStops2.push(/* @__PURE__ */ jsx_dev_runtime10.jsxDEV(Stop, {
           number: item
         }, undefined, false, undefined, this));
       });
@@ -19276,39 +19362,87 @@ function App() {
     }
     setStopDisplayList(displayStops2);
   }
-  import_react8.useEffect(() => {
+  function removeStopDraggable(number) {
+    let list = new Array;
+    if (stopList != null && Array.isArray(stopList)) {
+      list = stopList;
+    }
+    var listNoRemovedStop = list.filter(function(element) {
+      return element != number;
+    });
+    setStopList(listNoRemovedStop);
+    setCookie("stopList", listNoRemovedStop);
+    location.reload();
+  }
+  function displayDraggableStops() {
+    var displayStops2 = [];
+    try {
+      stopList.forEach((item) => {
+        displayStops2.push(/* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
+          className: "flex flex-row gap-1",
+          children: [
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("button", {
+              onClick: () => removeStopDraggable(item),
+              className: "open-sans-600 bg-linear-to-t from-slate-400 to-slate-300 hover:bg-linear-to-t hover:from-slate-500 hover:to-slate-400 hover:text-slate-800 text-zinc-700 font-bold  rounded-sm shadow-md border-1 border-slate-950 size-9 justify-center items-center",
+              children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
+                className: "flex flex-row gap-2 justify-center",
+                children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(Trash, {}, undefined, false, undefined, this)
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(DraggableStopName, {
+              number: item
+            }, undefined, false, undefined, this)
+          ]
+        }, undefined, true, undefined, this));
+      });
+    } catch {
+    }
+    setStopDraggableDisplayList(displayStops2);
+  }
+  import_react9.useEffect(() => {
     const interval = setInterval(() => {
       displayStops();
+      displayDraggableStops();
     }, 1000);
   }, []);
-  return /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(SkyBox, {
+  return /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(SkyBox, {
     children: [
-      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(import_react_modal.default, {
+      /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(import_react_modal.default, {
         isOpen: settingsIsOpen,
         contentLabel: "Edytuj przystanki",
         className: "open-sans-600 border-2 text-slate-500 border-neutral-50/50 flex flex-col gap-2 backdrop-blur-sm w-sm bg-neutral-200/60 p-4 shadow-xl rounded-xs m-auto",
-        children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+        children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
           className: "w-full flex flex-col",
           children: [
-            /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("button", {
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("button", {
               onClick: () => setSettingsIsOpen(!settingsIsOpen),
               className: "open-sans-600 bg-linear-to-b from-red-500 to-red-600 hover:bg-linear-to-b hover:from-red-600 hover:to-red-700 hover:text-neutral-200 text-neutral-200 font-bold  rounded-sm  shadow-md border-1 border-red-900 size-9 justify-center items-center  place-self-end",
-              children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+              children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
                 className: "flex flex-row gap-2 justify-center",
-                children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(X, {}, undefined, false, undefined, this)
+                children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(X, {}, undefined, false, undefined, this)
               }, undefined, false, undefined, this)
             }, undefined, false, undefined, this),
-            /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
+              className: "flex flex-col gap-1",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("label", {
+                  className: "block font-bold mb-2",
+                  children: "Twoje przystanki"
+                }, undefined, false, undefined, this),
+                stopDraggableDisplayList
+              ]
+            }, undefined, true, undefined, this),
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
               className: "mb-4 flex-col flex gap-2",
               children: [
-                /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+                /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
                   children: [
-                    /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("label", {
+                    /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("label", {
                       className: "block font-bold mb-2",
                       for: "stopNumber",
                       children: "Dodaj przystanek"
                     }, undefined, false, undefined, this),
-                    /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("input", {
+                    /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("input", {
                       className: "border rounded w-full py-2 px-3  leading-tight focus:outline-none shadow-outline shadow-md bg-neutral-100",
                       id: "stopNumber",
                       type: "text",
@@ -19316,19 +19450,19 @@ function App() {
                       placeholder: "Numer przystanku",
                       onChange: (e) => setStopNumberChosenForAdding(e.target.value)
                     }, undefined, false, undefined, this),
-                    /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("p", {
+                    /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("p", {
                       children: [
                         "Numer przystanku znajdziesz na",
-                        /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("a", {
+                        /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("a", {
                           className: "hover:underline",
                           href: "https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow",
-                          children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+                          children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
                             className: "flex flex-row",
                             children: [
-                              /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("p", {
+                              /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("p", {
                                 children: "stronie ZDiTM"
                               }, undefined, false, undefined, this),
-                              /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(ExternalLink, {
+                              /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(ExternalLink, {
                                 size: 18
                               }, undefined, false, undefined, this)
                             ]
@@ -19338,42 +19472,38 @@ function App() {
                     }, undefined, true, undefined, this)
                   ]
                 }, undefined, true, undefined, this),
-                /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Button, {
+                /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(Button, {
                   onClick: addStop,
                   children: "Dodaj przystanek"
-                }, undefined, false, undefined, this),
-                /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Button, {
-                  onClick: removeStop,
-                  children: "Usuń przystanek"
                 }, undefined, false, undefined, this)
               ]
             }, undefined, true, undefined, this)
           ]
         }, undefined, true, undefined, this)
       }, undefined, false, undefined, this),
-      /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+      /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
         className: "flex flex-col gap-4 mt-5 mb-5",
-        children: /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Card, {
+        children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(Card, {
           children: [
-            /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
               className: "flex flex-row gap-16",
               children: [
-                /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+                /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
                   className: "open-sans-600 text-slate-600 text-4xl  pb-2 pt-2",
                   children: "Griffin"
                 }, undefined, false, undefined, this),
-                /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+                /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
                   className: "open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end",
-                  children: '4.3 "Stare miasto"'
+                  children: '4.4 "Stare miasto"'
                 }, undefined, false, undefined, this)
               ]
             }, undefined, true, undefined, this),
             stopDisplayList,
-            /* @__PURE__ */ jsx_dev_runtime9.jsxDEV(Button, {
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(Button, {
               onClick: () => setSettingsIsOpen(!settingsIsOpen),
               children: "Ustawienia"
             }, undefined, false, undefined, this),
-            /* @__PURE__ */ jsx_dev_runtime9.jsxDEV("div", {
+            /* @__PURE__ */ jsx_dev_runtime10.jsxDEV("div", {
               className: "open-sans-600 text-slate-600",
               children: "made in Szczecin with love by Moka 2025"
             }, undefined, false, undefined, this)
@@ -19385,12 +19515,12 @@ function App() {
 }
 
 // src/frontend.tsx
-var jsx_dev_runtime10 = __toESM(require_jsx_dev_runtime(), 1);
+var jsx_dev_runtime11 = __toESM(require_jsx_dev_runtime(), 1);
 function start() {
   const root = import_client.createRoot(document.getElementById("root"));
-  root.render(/* @__PURE__ */ jsx_dev_runtime10.jsxDEV(CookiesProvider, {
+  root.render(/* @__PURE__ */ jsx_dev_runtime11.jsxDEV(CookiesProvider, {
     defaultSetOptions: { path: "/" },
-    children: /* @__PURE__ */ jsx_dev_runtime10.jsxDEV(App, {}, undefined, false, undefined, this)
+    children: /* @__PURE__ */ jsx_dev_runtime11.jsxDEV(App, {}, undefined, false, undefined, this)
   }, undefined, false, undefined, this));
 }
 if (document.readyState === "loading") {

@@ -1,5 +1,5 @@
 import "./index.css";
-import { Bus, X, ExternalLink } from 'lucide-react';
+import { Bus, X, ExternalLink, Trash, ArrowUp, ArrowDown } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -14,20 +14,46 @@ import { SkyBox } from "./components/SkyBox";
 import { Button } from "./components/Button";
 import { LineNumbers } from "./components/LineNumbers";
 import { Stop } from "./components/Stop";
+import DraggableList from "react-draggable-list";
+import { DraggableStopName } from "./components/DraggableStop";
+//import { PoznanStopName } from "./components/PoznanStopName";
+//import { PoznanLineNumber } from "./components/PoznanLineNumber";
 
 export function App() {
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies(); //ciasteczka
   const [settingsIsOpen,setSettingsIsOpen] = useState(false);
   const [stopList,setStopList] = useState((function(){
     if(Array.isArray(cookies.stopList)){return cookies.stopList;}else{return [];}
-  })());
-  const [stopNumberChosenForAdding,setStopNumberChosenForAdding] = useState();
-  const [stopDisplayList,setStopDisplayList] = useState();
+  })()); //glowna lista przyztankow 
+  const [stopNumberChosenForAdding,setStopNumberChosenForAdding] = useState(); //numer dodawanego (usuwanego) przystanku
+  const [stopDisplayList,setStopDisplayList] = useState(); //lista gotowych do wyseitlenia elementow przystankowych
   
-  //if(cookies.stopList != undefined){setStopList(cookies.stopList);}
+  const [stopDraggableDisplayList,setStopDraggableDisplayList] = useState();
+  async function checkIfStopExists(number) {
+    //bierze departures z API
+    var stop = null;
+    const request = new Request("https://www.zditm.szczecin.pl/api/v1/stops", {
+        method: "GET",
+    });
 
-  function addStop(){
-    if( stopNumberChosenForAdding != undefined){
+    const response = await fetch(request).then((response) => response.text())
+        .then((data) => {
+            //console.log(data);
+            JSON.parse(data).data.forEach((element)=>{
+              if (element.number == number) {
+                stop = element;
+              } 
+            });
+        });
+    if(stop != null){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+  async function addStop(){
+    if( stopNumberChosenForAdding != undefined && await checkIfStopExists(stopNumberChosenForAdding)){
       let list = new Array();
       //alert(stopList);
 
@@ -46,28 +72,30 @@ export function App() {
       setSettingsIsOpen(false);
       //alert(stopList);
 
+    }else if(stopNumberChosenForAdding != undefined){
+      alert("Taki przystanek nie istnieje. Numer przystanku znajdziesz na stronie ZDiTM");
     }
   }
   function removeStop(){
     if( stopNumberChosenForAdding != undefined){
       let list = new Array();
-      //alert(stopList);
+    //alert("do usuneicie");
+      
 
       if (stopList != undefined && Array.isArray(stopList)){
         list = stopList;
       }
-      //if(list.includes(stopNumberChosenForAdding)){
-        var listNoRemovedStop = list.splice(list.indexOf(stopNumberChosenForAdding), 1) 
-      //}
-
       
+      var listNoRemovedStop =  list.filter(function (element) {
+          return element != stopNumberChosenForAdding;
+      });
 
       setStopList(listNoRemovedStop);
-      //alert(listNoRemovedStop);
-      setCookie("stopList",listNoRemovedStop)
       setSettingsIsOpen(false);
       //alert(stopList);
-
+      //displayStops(); 
+      setCookie("stopList",listNoRemovedStop);
+      location.reload()
     }
   }
   function displayStops(){
@@ -77,14 +105,58 @@ export function App() {
         displayStops.push(<Stop number={item}/>);
       });
     }catch{
-
+      //puste
     }
-    
     setStopDisplayList(displayStops);
+  }
+  function removeStopDraggable(number){
+    //removeStop();
+    let list = new Array();
+    //alert("do usuneicie");
+      
+
+      if (stopList != undefined && Array.isArray(stopList)){
+        list = stopList;
+      }
+      
+      var listNoRemovedStop =  list.filter(function (element) {
+          return element != number;
+      });
+
+      setStopList(listNoRemovedStop);
+      //setSettingsIsOpen(false);
+      //alert(stopList);
+      //displayStops(); 
+      setCookie("stopList",listNoRemovedStop);
+      location.reload()
+  }
+
+  
+  function displayDraggableStops(){
+    var displayStops = [];
+    try{
+      stopList.forEach((item)=>{
+        displayStops.push(
+          <div className="flex flex-row gap-1">
+            
+            <button onClick={()=>removeStopDraggable(item)} className="open-sans-600 bg-linear-to-t from-slate-400 to-slate-300 hover:bg-linear-to-t hover:from-slate-500 hover:to-slate-400 hover:text-slate-800 text-zinc-700 font-bold  rounded-sm shadow-md border-1 border-slate-950 size-9 justify-center items-center">
+              <div className="flex flex-row gap-2 justify-center">
+                <Trash />
+              </div>
+            </button>
+            <DraggableStopName number={item}/>
+          </div>
+        );
+      });
+    }catch{
+      //puste
+    }
+    setStopDraggableDisplayList(displayStops);
   }
   useEffect(() => {
         const interval = setInterval(() => {
-        displayStops(); 
+        displayStops();
+        displayDraggableStops(); 
         }, 1000);
       }, [])
   return (
@@ -99,7 +171,12 @@ export function App() {
                 <X />
               </div>
             </button>
-            
+            <div className="flex flex-col gap-1">
+            <label className="block font-bold mb-2" >
+              Twoje przystanki
+            </label>
+            {stopDraggableDisplayList}
+            </div>
             <div className="mb-4 flex-col flex gap-2">
               <div>
                 <label className="block font-bold mb-2" for="stopNumber">
@@ -116,7 +193,7 @@ export function App() {
                 </p>
               </div>
               <Button onClick={addStop}>Dodaj przystanek</Button>
-              <Button onClick={removeStop}>Usuń przystanek</Button>
+              {/*<Button onClick={removeStop}>Usuń przystanek</Button>*/}
             </div>
         </div>
       </Modal>
@@ -127,7 +204,7 @@ export function App() {
             Griffin
             </div>
             <div className="open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end">
-              4.3 "Stare miasto"
+              4.4 "Stare miasto"
             </div>
           </div>
 
