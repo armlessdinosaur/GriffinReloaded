@@ -16,8 +16,11 @@ import { LineNumbers } from "./components/LineNumbers";
 import { Stop } from "./components/Stop";
 import DraggableList from "react-draggable-list";
 import { DraggableStopName } from "./components/DraggableStop";
+import { OutOfOrder } from "./components/OutOfOrder";
 //import { PoznanStopName } from "./components/PoznanStopName";
 //import { PoznanLineNumber } from "./components/PoznanLineNumber";
+import closeX from "./assets/closeX.svg";
+import deleteBin from "./assets/deleteBin.svg";
 
 export function App() {
   const [cookies, setCookie, removeCookie] = useCookies(); //ciasteczka
@@ -139,9 +142,13 @@ export function App() {
         displayStops.push(
           <div className="flex flex-row gap-1">
             
-            <button onClick={()=>removeStopDraggable(item)} className="open-sans-600 bg-linear-to-t from-slate-400 to-slate-300 hover:bg-linear-to-t hover:from-slate-500 hover:to-slate-400 hover:text-slate-800 text-zinc-700 font-bold  rounded-sm shadow-md border-1 border-slate-950 size-9 justify-center items-center">
+            <button onClick={()=>removeStopDraggable(item)} className="open-sans-600 bg-linear-to-t from-slate-400 to-slate-300 hover:bg-linear-to-t hover:from-slate-500 hover:to-slate-400 hover:text-slate-800 text-zinc-700 font-bold  rounded-sm shadow-md border-2 border-slate-400 size-9 pr-2 pl-2 justify-center items-center">
               <div className="flex flex-row gap-2 justify-center">
-                <Trash />
+              <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve"  viewBox="0 0 27 35" className="size-5 fill-slate-600">
+                <path d="M0 2.25h27V6H0z"/>
+                <path d="M18 0H9L7.5 3h12L18 0ZM0 8.25h27v21l-5.197 5.25H5.25L0 29.25v-21Zm7.5 4.5h-3v15l1.5 1.5h1.5v-16.5Zm7.5 0h-3v16.5h3v-16.5Zm7.5 0h-3v16.5H21l1.5-1.5v-15Z"/>
+              </svg>
+                
               </div>
             </button>
             <DraggableStopName number={item}/>
@@ -166,9 +173,9 @@ export function App() {
           contentLabel={"Edytuj przystanki"}
           className="open-sans-600 border-2 text-slate-500 border-neutral-50/50 flex flex-col gap-2 backdrop-blur-sm w-sm bg-neutral-200/60 p-4 shadow-xl rounded-xs m-auto">
         <div className="w-full flex flex-col">
-            <button onClick={()=>setSettingsIsOpen(!settingsIsOpen)} className="open-sans-600 bg-linear-to-b from-red-500 to-red-600 hover:bg-linear-to-b hover:from-red-600 hover:to-red-700 hover:text-neutral-200 text-neutral-200 font-bold  rounded-sm  shadow-md border-1 border-red-900 size-9 justify-center items-center  place-self-end">
+            <button onClick={()=>setSettingsIsOpen(!settingsIsOpen)} className="open-sans-600 bg-linear-to-b from-red-500 to-red-600 hover:bg-linear-to-b hover:from-red-600 hover:to-red-700 hover:text-neutral-200 text-neutral-200 font-bold  rounded-sm  shadow-md border-2 border-red-700 size-9 justify-center items-center  place-self-end">
               <div className="flex flex-row gap-2 justify-center">
-                <X />
+                <img src={closeX} alt="X" className="size-5"/>
               </div>
             </button>
             <div className="flex flex-col gap-1">
@@ -182,7 +189,7 @@ export function App() {
                 <label className="block font-bold mb-2" for="stopNumber">
                   Dodaj przystanek
                 </label>
-                <input className="border rounded w-full py-2 px-3  leading-tight focus:outline-none shadow-outline shadow-md bg-neutral-100" id="stopNumber" type="text" value={stopNumberChosenForAdding} placeholder="Numer przystanku" onChange={(e) => setStopNumberChosenForAdding(e.target.value)}>
+                <input className="border-2 border-neutral-400/90 rounded w-full py-2 px-3  leading-tight focus:outline-none shadow-outline shadow-md bg-neutral-100" id="stopNumber" type="text" value={stopNumberChosenForAdding} placeholder="Numer przystanku" onChange={(e) => setStopNumberChosenForAdding(e.target.value)}>
                 </input>
                 <p>Numer przystanku znajdziesz na 
                   <a className="hover:underline" href="https://www.zditm.szczecin.pl/pl/pasazer/rozklady-jazdy/mapa-przystankow-i-pojazdow">
@@ -201,18 +208,18 @@ export function App() {
         <Card>
           <div className="flex flex-row gap-16">
             <div className="open-sans-600 text-slate-600 text-4xl  pb-2 pt-2">
-            Griffin
+            Gryfin
             </div>
             <div className="open-sans-600 text-slate-600 text-xl  pb-2 pt-2 place-self-end">
-              4.4 "Stare miasto"
+              4.5 "Stare miasto"
             </div>
           </div>
 
-          {stopDisplayList}
+          {stopList.length > 0 ? stopDisplayList : <OutOfOrder header={"Brak przystanków"} description={"W Ustawieniach możesz dodać swoje przystanki."}/>}
           
           <Button onClick={()=>setSettingsIsOpen(!settingsIsOpen)}>Ustawienia</Button>
           <div className="open-sans-600 text-slate-600">
-            made in Szczecin with love by Moka 2025
+            made in Szczecin with love by moka 2025
           </div>
         </Card>
       </div>

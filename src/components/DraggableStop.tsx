@@ -33,7 +33,7 @@ export function DraggableStopName({number}){
         return (
             <div className="w-full">
               {/*Tablica przystankowa*/}
-              <div className="open-sans-700 w-full text-lg bg-radial from-neutral-50 to-neutral-200 text-blue-900 p-1 text-center shadow-md flex felx-row gap-3 justify-center items-center border-1 border-neutral-500">
+              <div className="open-sans-700 w-full text-lg bg-radial from-neutral-50 to-neutral-200 text-blue-900 p-1 text-center shadow-md flex flex-row gap-3 justify-center items-center  border-2 border-neutral-300">
                 <div className="">{stopName}</div> 
                 <div className="flex flex-col gap-1">
                   <div className="text-sm font-bold gap-0 text-neutral-900">

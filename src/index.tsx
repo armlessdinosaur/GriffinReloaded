@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import index from "./index.html";
-/*
+
 const server = serve({
   routes: {
     // Serve index.html for all unmatched routes.
@@ -33,8 +33,9 @@ const server = serve({
 });
 
 console.log(`🚀 Server running at ${server.url}`);
-*/
 
+
+/*
 import path from "path";
 
 const express = require('express')
@@ -46,3 +47,4 @@ app.use(express.static(path.join(__dirname,"build")));
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+  */

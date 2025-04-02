@@ -1,0 +1,9 @@
+{
+    "name": "Gryfin",
+    "short_name": "Gryfin",
+    "theme_color": "#c5d8e7",
+    "background_color": "#c5d8e7",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/"
+  }

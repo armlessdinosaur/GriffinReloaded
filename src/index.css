@@ -75,3 +75,9 @@
 .departuresList{
   text-shadow: 0px 0px 2px oklch(0.852 0.199 91.936);
 }
+
+body {
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
