@@ -1,9 +1,35 @@
 {
-    "name": "Gryfin",
-    "short_name": "Gryfin",
+    "name": "Griffin",
+    "short_name": "Griffin",
     "theme_color": "#c5d8e7",
     "background_color": "#c5d8e7",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/"
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "assets/AppIcon1024.png",
+        "type": "image/png",
+        "purpose": "any",
+        "size": "1024x1024"
+      },
+      {
+        "src": "assets/AppIcon512.png",
+        "type": "image/png",
+        "purpose": "any",
+        "size": "512x512"
+      },
+      {
+        "src": "assets/AppIcon384.png",
+        "type": "image/png",
+        "purpose": "any",
+        "size": "384x384"
+      },
+      {
+        "src": "assets/AppIcon192.png",
+        "type": "image/png",
+        "purpose": "any",
+        "size": "192x192"
+      }
+    ]
   }
